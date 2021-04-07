@@ -12,6 +12,7 @@ import gui.command.LogInStudent;
 import gui.controller.ILogIn;
 import gui.model.LoginModel;
 import gui.util.AlertDisplay;
+import gui.util.Animation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -141,8 +142,7 @@ public class LogInWindowController implements Initializable, ILogIn {
     }
 
     /**
-     * method is responsible for handling logging in
-     * It follows command pattern
+     * method is called when users email and password is correct
      * @param actionEvent
      * @param command
      */
@@ -180,6 +180,12 @@ public class LogInWindowController implements Initializable, ILogIn {
            executeLogIn(actionEvent, new LogInStudent(loginModel.
                    getStudent(emailField.getText())));
         }
+        else{
+            //this animation is temporary
+            Animation.shakeNodeAnimation(emailField);
+            Animation.shakeNodeAnimation(passwordField);
+        }
+
     }
 
     /**

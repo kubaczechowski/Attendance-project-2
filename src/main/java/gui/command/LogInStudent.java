@@ -40,6 +40,6 @@ public class LogInStudent extends Command{
         scene.getStylesheets().add("/css/style.css");
         stage.setScene(scene);
         stage.show();
-        return false;
+        return true;
     }
 }

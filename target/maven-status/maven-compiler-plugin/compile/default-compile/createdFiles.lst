@@ -10,6 +10,7 @@ bll\managers\RecordManager.class
 gui\controller\LogInWindowController$Opener.class
 gui\controller\StudentDashboardController$1.class
 bll\managers\ChangeRequestManager.class
+gui\util\Animation.class
 bll\util\PasswordHasher.class
 gui\controller\StudentDashboardController$4.class
 gui\controller\StudentDashboardController$3.class
