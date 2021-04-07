@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane fx:controller="gui.controller.Request2Controller" prefHeight="129.0" prefWidth="446.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="66.0" fitWidth="65.0" layoutX="18.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../Drapo-Dashboard-JavaFX/src/drapo/dashboard/images/icons8_500px_64px.png" />
+         </image>
+      </ImageView>
+      <Separator layoutX="91.0" layoutY="22.0" orientation="VERTICAL" prefHeight="102.0" prefWidth="4.0" />
+      <Label layoutX="102.0" layoutY="31.0" text="Date" textFill="#ddd9d9" underline="true">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="102.0" layoutY="84.0" text="Subject" textFill="#ddd9d9" underline="true">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <JFXButton layoutX="290.0" layoutY="44.0" onAction="#requestChange" prefHeight="58.0" prefWidth="157.0" text="Request Change">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </JFXButton>
+      <Label layoutX="181.0" layoutY="31.0" text="Start time" textFill="#ddd9d9" underline="true">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="181.0" layoutY="84.0" text="End time" textFill="#ddd9d9" underline="true">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="date" layoutX="101.0" layoutY="52.0" text="22.03.2020" textFill="#dddddd">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="subject" layoutX="105.0" layoutY="105.0" text="SCO" textFill="#dddddd">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="startTime" layoutX="181.0" layoutY="52.0" text="12:30" textFill="#dddddd">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="EndTime" layoutX="181.0" layoutY="105.0" text="Brad Pitt" textFill="#dddddd">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

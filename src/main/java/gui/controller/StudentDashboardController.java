@@ -20,15 +20,19 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -40,6 +44,7 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 
 import java.awt.*;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -53,6 +58,10 @@ import java.util.ResourceBundle;
 
 public class StudentDashboardController implements Initializable {
 
+    public ScrollPane scroll;
+    public AnchorPane anchtest;
+    @FXML
+    private VBox requestVbox;
     @FXML
     private ImageView studentImage;
     @FXML
@@ -75,8 +84,7 @@ public class StudentDashboardController implements Initializable {
     private Text hourLabel;
     @FXML
     private AnchorPane anchorChart;
-    @FXML
-    private ListView<Record> listView;
+
 
     private final ToggleGroup groupRadioButtons = new ToggleGroup();
     StackPane stackPane = new StackPane();
@@ -99,11 +107,13 @@ public class StudentDashboardController implements Initializable {
     private boolean quoteIsShown = false;
     Label quote = new Label(model.getRandQuote());
 
+
     //ObservableList<PieChart.Data> pieChartData = createData(getCurrentMonth());
     //donutChart = new DonutChart(pieChartData);
 
     public void setLoggedStudent(Student student) {
         this.loggedStudent = student;
+        System.out.println("logged student:" + student.getId());
         model.setAbsentDays(loggedStudent.getId());
         this.currentLesson = model.getCurrentLesson(loggedStudent.getCourseID());
        if(this.currentLesson==null)
@@ -116,11 +126,37 @@ public class StudentDashboardController implements Initializable {
         initComboBox();
         initPieChart();
         comboBoxListener();
-        setListView();
+        //setListView();
+        setRequests();
         digitalClock();
         initGroupRadioButtons();
         listenForShowingQuote();
         listenerPieChart();
+    }
+
+    private void setRequests() {
+        try{
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Request2.fxml"));
+            Parent root =  loader.load();
+            root.getStylesheets().add("/css/record.css");
+             //  RequestController requestController = (RequestController) loader.getController();
+           // requestController.setInfo(r.getDate() );
+            anchtest.getChildren().add(root);
+
+
+       /* Node node = (Node) FXMLLoader.load(getClass().getResource("/Request2.fxml"));
+           requestVbox.getChildren().add(node);
+
+        */
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (Record r: model.getRecordObservableList() ) {
+            System.out.println(r.toString());
+
+        }
     }
 
     private void comboBoxListener() {
@@ -369,7 +405,7 @@ public class StudentDashboardController implements Initializable {
                 new PieChart.Data("Present", r.nextInt(100) + 50),
                 new PieChart.Data("Absent", r.nextInt(30)+5));
     }
-
+/*
     private void setListView() {
        listView.setItems(model.getRecordObservableList());
         for (Record r: model.getRecordObservableList()
@@ -383,6 +419,8 @@ public class StudentDashboardController implements Initializable {
             }
         });
     }
+
+ */
 
     /**
      * method handles clock functionality
