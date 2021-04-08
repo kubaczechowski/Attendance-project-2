@@ -1,7 +1,6 @@
 package be;
 
 public class Student extends User {
-
     private int semester;
     private int courseID;
 
@@ -29,9 +28,6 @@ public class Student extends User {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "semester=" + semester +
-                ", courseID=" + courseID +
-                '}';
+        return getName() + " Course: " + getCourseID();
     }
 }

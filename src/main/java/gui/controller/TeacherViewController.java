@@ -1,5 +1,8 @@
 package gui.controller;
 
+import be.*;
+import bll.SingleDayAbsenceCalculator;
+import gui.model.TeacherViewModel;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -25,11 +28,8 @@ import java.util.ResourceBundle;
 /**
  * @author kamila
  */
-public class TeacherViewController{
+public class TeacherViewController implements Initializable {
 
-}
-//public class TeacherViewController implements Initializable {}
-/*
 
     @FXML private Text dateLabel;
     @FXML private Text dayLabel;
@@ -46,20 +46,18 @@ public class TeacherViewController{
     @FXML private ListView absentList;
     @FXML private TableView studentsTable;
     @FXML private PieChart absenceChart;
-
-    private StudentModel studentModel;
-    private ChangeModel changeModel;
-
+    private TeacherViewModel teacherModel;
+    private Teacher loggedTeacher;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        studentModel = new StudentModel();
-        changeModel = new ChangeModel();
+        teacherModel = new TeacherViewModel();
         setChart();
         setStudentsTable();
         setAbsentList();
         setChangeTable();
         setDate();
+        setCurrentLesson();
     }
 
     private void setDate() {
@@ -74,25 +72,30 @@ public class TeacherViewController{
     }
 
     private void setChangeTable() {
-        nameColumnn.setCellValueFactory(new PropertyValueFactory<Change, String>("name"));
-        typeColumnn.setCellValueFactory(new PropertyValueFactory<Change, String>("type"));
-        dateColumnn.setCellValueFactory(new PropertyValueFactory<Change, String>("date"));
-        acceptColumnn.setCellValueFactory(new PropertyValueFactory<Change, Void>(""));
-        declineColumnn.setCellValueFactory(new PropertyValueFactory<Change, Void>(""));
+        nameColumnn.setCellValueFactory(new PropertyValueFactory<ChangeRequest, String>("name"));
+        typeColumnn.setCellValueFactory(new PropertyValueFactory<ChangeRequest, String>("type"));
+        dateColumnn.setCellValueFactory(new PropertyValueFactory<ChangeRequest, String>("date"));
+        acceptColumnn.setCellValueFactory(new PropertyValueFactory<ChangeRequest, Void>(""));
+        declineColumnn.setCellValueFactory(new PropertyValueFactory<ChangeRequest, Void>(""));
 
-        ObservableList<Change> changes = FXCollections.observableArrayList(changeModel.getAllChanges());
+        ObservableList<ChangeRequest> changes = FXCollections.observableArrayList(teacherModel.getAllChanges());
+        changes.add(new ChangeRequest(10, StatusType.PENDING));
+        changes.add(new ChangeRequest(11, StatusType.PENDING));
+        changes.add(new ChangeRequest(12, StatusType.PENDING));
 
-        Callback<TableColumn<Change, Void>, TableCell<Change, Void>> cellFactory = new Callback<TableColumn<Change, Void>, TableCell<Change, Void>>() {
+
+        Callback<TableColumn<ChangeRequest, Void>, TableCell<ChangeRequest, Void>> cellFactory = new Callback<TableColumn<ChangeRequest, Void>, TableCell<ChangeRequest, Void>>() {
             @Override
-            public TableCell<Change, Void> call(final TableColumn<Change, Void> param) {
-                final TableCell<Change, Void> cell = new TableCell<Change, Void>() {
+            public TableCell<ChangeRequest, Void> call(final TableColumn<ChangeRequest, Void> param) {
+                final TableCell<ChangeRequest, Void> cell = new TableCell<ChangeRequest, Void>() {
 
                     private final Button btn = new Button("Accept");
 
                     {
                         btn.setOnAction((ActionEvent event) -> {
-                            Change change = getTableView().getItems().get(getIndex());
+                            ChangeRequest change = getTableView().getItems().get(getIndex());
                             changes.remove(change);
+                            //we need to make getName() returning real name
                             System.out.println(change.getName() + " accepted");
                         });
                     }
@@ -111,17 +114,18 @@ public class TeacherViewController{
             }
         };
 
-        Callback<TableColumn<Change, Void>, TableCell<Change, Void>> cFactory = new Callback<TableColumn<Change, Void>, TableCell<Change, Void>>() {
+        Callback<TableColumn<ChangeRequest, Void>, TableCell<ChangeRequest, Void>> cFactory = new Callback<TableColumn<ChangeRequest, Void>, TableCell<ChangeRequest, Void>>() {
             @Override
-            public TableCell<Change, Void> call(final TableColumn<Change, Void> param) {
-                final TableCell<Change, Void> cell = new TableCell<Change, Void>() {
+            public TableCell<ChangeRequest, Void> call(final TableColumn<ChangeRequest, Void> param) {
+                final TableCell<ChangeRequest, Void> cell = new TableCell<ChangeRequest, Void>() {
 
                     private final Button btn = new Button("Decline");
 
                     {
                         btn.setOnAction((ActionEvent event) -> {
-                            Change change = getTableView().getItems().get(getIndex());
+                            ChangeRequest change = getTableView().getItems().get(getIndex());
                             changes.remove(change);
+                            //we need to make getName() returning real name
                             System.out.println(change.getName() + " declined");
                         });
                     }
@@ -140,25 +144,29 @@ public class TeacherViewController{
             }
         };
 
-
-
         changeTable.setItems(changes);
-
         acceptColumnn.setCellFactory(cellFactory);
         declineColumnn.setCellFactory(cFactory);
     }
 
     private void setAbsentList() {
-        ObservableList<String> absentStudents = FXCollections.observableArrayList(studentModel.getAbsentToday());
+        ObservableList<Student> absentStudents = FXCollections.observableArrayList();
+        if(!teacherModel.getAbsentToday().isEmpty()){
+           absentStudents.addAll((Student) teacherModel.getAbsentToday());
+        }
+        //absentStudents.add(new Student(5,"Richard Button", "RB@easv.dk", "photopath", 1, 1));
         absentList.setItems(absentStudents);
     }
 
     private void setChart() {
         ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList(
-                new PieChart.Data("Absent", 12),
-                new PieChart.Data("Present", 78)
-        );
+            new PieChart.Data("Absent", 22),
+            new PieChart.Data("Present", 78));
         absenceChart.setData(pieData);
+    }
+
+    private void setCurrentLesson(){
+        teacherModel.getCurrentLesson(1);
     }
 
     private void setStudentsTable() {
@@ -167,9 +175,10 @@ public class TeacherViewController{
         semesterColumn.setCellValueFactory(new PropertyValueFactory<Student, Double>("p_semester"));
         dayColumn.setCellValueFactory(new PropertyValueFactory<Student, String>("day"));
 
-        ObservableList<Student> students = FXCollections.observableArrayList(studentModel.getAllStudents());
-        studentsTable.setItems(students);
+          ObservableList<Student> students = FXCollections.observableArrayList(teacherModel.getAllStudents());
+          studentsTable.setItems(students);
     }
+
 
     public void logOut(ActionEvent actionEvent) {
         Stage s = (Stage) dateLabel.getScene().getWindow();
@@ -177,4 +186,4 @@ public class TeacherViewController{
     }
 }
 
- */
+

@@ -1,5 +1,6 @@
 import be.Student;
 import gui.controller.StudentDashboardController;
+import gui.controller.TeacherViewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,20 +20,17 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         //FXMLLoader loader = new FXMLLoader(getClass().getResource("logIn.fxml"));
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("StudentDashboard.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("TeacherView.fxml"));
         Parent root = loader.load();
 
         //for the student dashboard in the stage of development
-        StudentDashboardController studentDashboardController = (StudentDashboardController)
+        TeacherViewController teacherViewController = (TeacherViewController)
         loader.getController();
         stage.setTitle("Attendance tracker");
         stage.getIcons().add(new Image("/images/icon.png"));
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/css/style.css");
         stage.setScene(scene);
-        studentDashboardController.setLoggedStudent(new Student(1, "Dorelia McCawley", "dmccawley0@epa.gov",
-                null,
-                1, 1));
 
 
         stage.show();

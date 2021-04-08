@@ -25,4 +25,8 @@ public class ChangeRequest {
     public void setStatus(StatusType status) {
         this.status = status;
     }
+
+    public String getName(){
+       return "connect ChangeRequest with Student name";
+    }
 }
