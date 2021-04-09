@@ -4,6 +4,7 @@ import be.Course;
 import be.Student;
 import be.Subject;
 import be.Teacher;
+import bll.exception.BLLexception;
 import com.jfoenix.controls.JFXTextField;
 import dal.dataAccessObjects.CourseDAO;
 import gui.model.AdminModel;
@@ -38,12 +39,11 @@ public class AdminViewController implements Initializable {
     @FXML private TableColumn<Teacher, String> columnEmail;
     @FXML private TableColumn<Teacher, String> columnDepartment;
     @FXML private TableColumn<Teacher, ImageView> photopath;
-    @FXML private TableColumn<Teacher, String> columnPassword;
+
 
     @FXML private JFXTextField nameFieldTeacher;
     @FXML private JFXTextField emailFieldTeacher;
     @FXML private JFXTextField departmenFieldTeacher;
-    @FXML private JFXTextField passwordFieldTeacher;
     @FXML private JFXTextField photopathFieldTeacher;
 
     //StudentsTableView
@@ -54,14 +54,14 @@ public class AdminViewController implements Initializable {
     @FXML private TableColumn<Student, Integer> columnCourseID;
     @FXML private TableColumn<Student, Integer> columnSemester;
     @FXML private TableColumn<Student, ImageView> Studentphotopath;
-    @FXML private TableColumn<Student, String> columnStudentPassword;
+
 
     @FXML private JFXTextField nameFieldStudent;
     @FXML private JFXTextField EmailFieldStudent;
     @FXML private JFXTextField coursIDFieldStudent;
     @FXML private JFXTextField semesterFieldStudent;
     @FXML private JFXTextField photoPathFieldStudent;
-    @FXML private JFXTextField passwordFieldStudent;
+
 
     //SubjectsTableView
     @FXML private TableView<Subject> subjectTable;
@@ -86,38 +86,54 @@ public class AdminViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initTeacherTableView();
-        initStudentTableView();
-        initSubjectTableView();
-        initCourseTableView();
+        try {
+            initTeacherTableView();
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
+        try {
+            initStudentTableView();
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
+        try {
+            initSubjectTableView();
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
+        try {
+            initCourseTableView();
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
     }
 
-    private void initTeacherTableView() {
+    private void initTeacherTableView() throws BLLexception {
         columnTeachersID.setCellValueFactory(new PropertyValueFactory<Teacher, Integer>("ID"));
         columnName.setCellValueFactory(new PropertyValueFactory<Teacher, String>("Name"));
         columnEmail.setCellValueFactory(new PropertyValueFactory<Teacher, String>("Email"));
         columnDepartment.setCellValueFactory(new PropertyValueFactory<Teacher, String>("Department"));
         photopath.setCellValueFactory(new PropertyValueFactory<Teacher, ImageView>("PhotoPath"));
-        columnPassword.setCellValueFactory(new PropertyValueFactory<Teacher, String>("Password"));
+
 
         adminModel.loadTeachers();
         teacherTable.setItems(adminModel.getAllTeachers());
     }
 
-    private void initStudentTableView(){
+    private void initStudentTableView() throws BLLexception {
         columnStudentID.setCellValueFactory(new PropertyValueFactory<Student, Integer>("ID"));
         columnStudentName.setCellValueFactory(new PropertyValueFactory<Student, String>("Name"));
         columnStudentEmail.setCellValueFactory(new PropertyValueFactory<Student,String>("Email"));
         columnCourseID.setCellValueFactory(new PropertyValueFactory<Student, Integer>("Course ID"));
         columnSemester.setCellValueFactory(new PropertyValueFactory<Student, Integer>("Semester"));
         Studentphotopath.setCellValueFactory(new PropertyValueFactory<Student,ImageView>("PhotoPath"));
-        columnStudentPassword.setCellValueFactory(new PropertyValueFactory<Student,String>("Password"));
+
 
         adminModel.loadStudents();
         studentTable.setItems(adminModel.getAllStudents());
     }
 
-    private void initSubjectTableView(){
+    private void initSubjectTableView() throws BLLexception {
         columnSubjectID.setCellValueFactory(new PropertyValueFactory<Subject,Integer>("ID"));
         columnSubjectName.setCellValueFactory(new PropertyValueFactory<Subject,String>("Name"));
         columnTeacherID.setCellValueFactory(new PropertyValueFactory<Subject,Integer>("Teacher ID"));
@@ -129,7 +145,7 @@ public class AdminViewController implements Initializable {
     }
 
 
-    private void initCourseTableView() {
+    private void initCourseTableView() throws BLLexception {
         columnID.setCellValueFactory(new PropertyValueFactory<Course,Integer>("ID"));
         columnCourseName.setCellValueFactory(new PropertyValueFactory<Course,String>("Name"));
 
@@ -139,7 +155,7 @@ public class AdminViewController implements Initializable {
 
     }
     //TeacherBtn-----
-    public void btnTeacherAdd(ActionEvent event) {
+    public void btnTeacherAdd(ActionEvent event) throws BLLexception {
         Teacher newTeacher = new Teacher(-1,
                                       nameFieldTeacher.getText(),
                                       emailFieldTeacher.getText(),
@@ -151,12 +167,12 @@ public class AdminViewController implements Initializable {
     }
 
 
-    public void btnTeacherDelete(ActionEvent event) {
+    public void btnTeacherDelete(ActionEvent event) throws BLLexception {
         Teacher selectedTeacher = teacherTable.getSelectionModel().getSelectedItem();
         adminModel.delete(selectedTeacher);
         adminModel.loadTeachers();
     }
-    public void btnTeacherEdit(ActionEvent event) {
+    public void btnTeacherEdit(ActionEvent event) throws BLLexception {
         Teacher newTeacher = teacherTable.getSelectionModel().getSelectedItem();
         newTeacher.setName(nameFieldTeacher.getText());
         newTeacher.setEmail(emailFieldTeacher.getText());
@@ -166,7 +182,7 @@ public class AdminViewController implements Initializable {
     }
 
     //StudentBtn-----
-    public void btnStudentAdd(ActionEvent event) {
+    public void btnStudentAdd(ActionEvent event) throws BLLexception {
 
         Student newStudent = new Student(-1,
                 nameFieldStudent.getText(),
@@ -179,13 +195,13 @@ public class AdminViewController implements Initializable {
         adminModel.save(newStudent);
     }
 
-    public void btnStudentDelete(ActionEvent event) {
+    public void btnStudentDelete(ActionEvent event) throws BLLexception {
         Student selectedStudent = studentTable.getSelectionModel().getSelectedItem();
         adminModel.delete(selectedStudent);
         adminModel.loadStudents();
     }
-    
-    public void btnStudentEdit(ActionEvent event) {
+
+    public void btnStudentEdit(ActionEvent event) throws BLLexception {
         Student newStudent = studentTable.getSelectionModel().getSelectedItem();
         newStudent.setName(nameFieldTeacher.getText());
         newStudent.setEmail(emailFieldTeacher.getText());
@@ -196,8 +212,8 @@ public class AdminViewController implements Initializable {
     }
 
     //SubjectBtn---------
-    public void btnSubjectAdd(ActionEvent event) {
-        Subject newSubject = new Subject(1,
+    public void btnSubjectAdd(ActionEvent event) throws BLLexception {
+        Subject newSubject = new Subject(-1,
                                          nameFieldSubject.getText(),
                                          Integer.parseInt(teacherIDFieldSubject.getText()),
                                           Integer.parseInt(courseIDFieldSubject.getText()));
@@ -205,13 +221,13 @@ public class AdminViewController implements Initializable {
         adminModel.save(newSubject);
     }
 
-    public void btnSubjectDelete(ActionEvent event) {
+    public void btnSubjectDelete(ActionEvent event) throws BLLexception {
         Subject selectedSubject = subjectTable.getSelectionModel().getSelectedItem();
         adminModel.delete(selectedSubject);
         adminModel.loadStudents();
     }
 
-    public void btnSubjectEdit(ActionEvent event) {
+    public void btnSubjectEdit(ActionEvent event) throws BLLexception {
         Subject newSubject = subjectTable.getSelectionModel().getSelectedItem();
         newSubject.setName(nameFieldSubject.getText());
         newSubject.setTeacherId(Integer.parseInt(teacherIDFieldSubject.getText()));
@@ -221,20 +237,20 @@ public class AdminViewController implements Initializable {
 
 
     //CourseBtn---------
-    public void btnCourseAdd(ActionEvent event) {
+    public void btnCourseAdd(ActionEvent event) throws BLLexception {
         Course newCourse = new Course(-1,
                                       nameFieldCourse.getText());
         adminModel.save(newCourse);
 
     }
 
-    public void btnCourseDelete(ActionEvent event) {
+    public void btnCourseDelete(ActionEvent event) throws BLLexception {
         Course selectedCourse = courseTableView.getSelectionModel().getSelectedItem();
         adminModel.delete(selectedCourse);
         adminModel.loadCourses();
     }
 
-    public void btnCourseEdit(ActionEvent event) {
+    public void btnCourseEdit(ActionEvent event) throws BLLexception {
         Course newCourse = courseTableView.getSelectionModel().getSelectedItem();
         newCourse.setName(nameFieldCourse.getText());
 

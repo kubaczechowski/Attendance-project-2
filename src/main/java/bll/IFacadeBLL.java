@@ -20,12 +20,43 @@ public interface IFacadeBLL {
 
     Student getStudent(String email) throws BLLexception;
 
+    void requestDeclined(ChangeRequest changeRequest) throws BLLexception;
+
     String getRandomQuote();
 
     ScheduleEntity getCurrentLesson(int courseId) throws BLLexception;
     Subject getSubject(int subjectId) throws BLLexception;
     Teacher getTeacher(int teacherId) throws BLLexception;
+    Teacher getTeacher(String email) throws BLLexception;
     void createRecord(Record record) throws BLLexception;
     List<Record> getAbsentDays(int studentId) throws BLLexception;
     void createChangeRequest(ChangeRequest newRequest) throws BLLexception;
+
+    //Teacher
+    List<Teacher> getAllTeacher() throws BLLexception;
+    void updateTeacher(Teacher oldTeacher, Teacher newTeacher) throws BLLexception;
+    void createTeacher(Teacher teacher) throws BLLexception;
+    void deleteTeacher(Teacher teacher) throws BLLexception;
+
+    //Student
+    List<Student> getAllStudent() throws BLLexception;
+    void updateStudent(Student oldStudent, Student newStudent) throws BLLexception;
+    void createStudent(Student student) throws BLLexception;
+    void deleteStudent(Student student) throws BLLexception;
+
+    //Subject
+    List<Subject> getAllSubject() throws BLLexception;
+    void updateSubject(Subject oldSubject, Subject newSubject) throws BLLexception;
+    void createSubject(Subject subject) throws BLLexception;
+    void deleteSubject(Subject subject) throws BLLexception;
+
+    //Course
+    List<Course> getAllCourse() throws BLLexception;
+    void updateCourse(Course oldCourse, Course newCourse) throws BLLexception;
+    void createCourse(Course course) throws BLLexception;
+    void deleteCourse(Course course) throws BLLexception;
+
+    List<ChangeRequest> getRequestsForTeacher(int teacherId) throws BLLexception;
+    void requestAccepted(ChangeRequest changeRequest) throws BLLexception;
+
 }

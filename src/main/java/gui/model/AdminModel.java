@@ -4,31 +4,50 @@ import be.Course;
 import be.Student;
 import be.Subject;
 import be.Teacher;
+import bll.IFacadeBLL;
+import bll.exception.BLLexception;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class AdminModel {
+
+    IFacadeBLL iFacadeBLL;
+
     private ObservableList<Teacher> obsTeacher;
     private ObservableList<Student> obsStudent;
     private ObservableList<Subject> obsSubject;
     private ObservableList<Course> obsCourse;
 
 
+    private AdminModel() {
+        obsTeacher = FXCollections.observableArrayList();
+        obsStudent= FXCollections.observableArrayList();
+        obsSubject = FXCollections.observableArrayList();
+        obsCourse = FXCollections.observableArrayList();
+
+    }
 
     //Teachers----------
     public ObservableList<Teacher> getAllTeachers() {
 
         return obsTeacher;
     }
-    public void loadTeachers() {
+
+    public void loadTeachers() throws BLLexception {
+        iFacadeBLL.getAllTeacher();
 
     }
-    public void delete(Teacher selectedTeacher) {
 
+    public void delete(Teacher selectedTeacher) throws BLLexception{
+        iFacadeBLL.deleteTeacher(selectedTeacher);
     }
-    public void save(Teacher teacher) {
 
+    public void save(Teacher teacher) throws BLLexception {
+        iFacadeBLL.createTeacher(teacher);
     }
-    public void updateTeacher(Teacher oldTeacher, Teacher newTeacher){
+
+    public void updateTeacher(Teacher oldTeacher, Teacher newTeacher) throws BLLexception {
+        iFacadeBLL.updateTeacher(oldTeacher,newTeacher);
 
     }
 
@@ -38,17 +57,21 @@ public class AdminModel {
 
         return obsStudent;
     }
-    public void loadStudents() {
 
+    public void loadStudents() throws BLLexception {
+        iFacadeBLL.getAllStudent();
     }
-    public void delete(Student selectedStudent) {
 
+    public void delete(Student selectedStudent) throws BLLexception{
+        iFacadeBLL.deleteStudent(selectedStudent);
     }
-    public void save(Student student) {
 
+    public void save(Student student) throws BLLexception {
+        iFacadeBLL.createStudent(student);
     }
-    public void updateStudent(Student oldStudent, Student newStudent){
 
+    public void updateStudent(Student oldStudent, Student newStudent) throws BLLexception {
+        iFacadeBLL.updateStudent(oldStudent,newStudent);
     }
 
 
@@ -58,17 +81,17 @@ public class AdminModel {
 
         return obsSubject;
     }
-    public void loadSubjects() {
-
+    public void loadSubjects() throws BLLexception {
+        iFacadeBLL.getAllSubject();
     }
-    public void delete(Subject selectedSubject) {
-
+    public void delete(Subject selectedSubject) throws BLLexception {
+        iFacadeBLL.deleteSubject(selectedSubject);
     }
-    public void save(Subject subject) {
-
+    public void save(Subject subject) throws BLLexception {
+        iFacadeBLL.createSubject(subject);
     }
-    public void updateSubject(Subject oldSubject, Subject newSubject){
-
+    public void updateSubject(Subject oldSubject, Subject newSubject) throws BLLexception {
+        iFacadeBLL.updateSubject(oldSubject,newSubject);
     }
 
 
@@ -78,16 +101,21 @@ public class AdminModel {
 
         return obsCourse;
     }
-    public void loadCourses() {
+
+    public void loadCourses() throws BLLexception {
+        iFacadeBLL.getAllCourse();
+    }
+
+    public void delete(Course selectedCourse) throws BLLexception{
+        iFacadeBLL.deleteCourse(selectedCourse);
 
     }
-    public void delete(Course selectedCourse) {
 
+    public void save(Course course) throws BLLexception {
+        iFacadeBLL.createCourse(course);
     }
-    public void save(Course course) {
 
-    }
-    public void updateCourse(Course oldCourse, Course newCourse){
-
+    public void updateCourse(Course oldCourse, Course newCourse) throws BLLexception {
+        iFacadeBLL.updateCourse(oldCourse,newCourse);
     }
 }
