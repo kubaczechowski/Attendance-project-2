@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
 
@@ -226,11 +227,8 @@ public class TeacherViewRefactoredController implements Initializable {
                 int minute = cal.get(Calendar.MINUTE);
                 int second = cal.get(Calendar.SECOND);
                 Platform.runLater(()->hourLabel.setText(hour + ":" + minute + ":" + second));
-                try {
                     sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
             }
         };
         Thread th1 = new Thread(runnable1);
@@ -334,9 +332,12 @@ public class TeacherViewRefactoredController implements Initializable {
             if(!s.toString().matches("Current lesson") &&
                     ! s.matches("All year")
             ) month =Months.valueOf(s);
-            if(s.matches("Current lesson") && currentLesson==null)
-                System.out.println("dont do anything");
+            if(s.matches("Current lesson") && currentLesson==null) {
+               sleep(1000);
+                Platform.runLater(() -> lblNoData.setText("No lesson at the moment"));
+            }
             else {
+                lblNoData.setText("");
                 pieData = strategy.createData(currentLesson, month, loggedTeacher, getSemester(sem));
                 Platform.runLater(() -> pieChart.getData().addAll(pieData));
             }
@@ -344,6 +345,16 @@ public class TeacherViewRefactoredController implements Initializable {
         });
         executorService.execute(thread);
     }
+
+    private void sleep(int millis){
+        try {
+            TimeUnit.MILLISECONDS.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     //" All students","1st sem", "2nd sem", "3rd sem", "4th sem");
     private void ChangePieChartListener2() {
