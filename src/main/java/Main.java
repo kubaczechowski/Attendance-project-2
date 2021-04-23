@@ -1,8 +1,4 @@
-import be.Student;
-import be.Teacher;
-import gui.controller.StudentDashboardController;
-import gui.controller.TeacherViewController;
-import gui.controller.TeacherViewRefactoredController;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
